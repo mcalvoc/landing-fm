@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fantasy Manager — El Único Fantasy con Puntaje en Vivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --verde: #00E87A;
+    --verde-oscuro: #00C060;
+    --oro: #FFD000;
+    --negro: #080C12;
+    --gris-oscuro: #0F1520;
+    --gris-medio: #1A2235;
+    --gris-borde: #243048;
+    --blanco: #F0F4FF;
+    --texto-suave: #7A8FAD;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'Barlow', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(8,12,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,232,122,0.1);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--verde);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--blanco); }
+
+  nav ul {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  nav ul a {
+    color: var(--texto-suave);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--verde); }
+
+  .btn-nav {
+    background: var(--verde);
+    color: var(--negro) !important;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+  }
+
+  .btn-nav:hover { background: var(--verde-oscuro); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 140px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,232,122,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(255,208,0,0.05) 0%, transparent 50%),
+      var(--negro);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(36,48,72,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(36,48,72,0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 80%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,232,122,0.1);
+    border: 1px solid rgba(0,232,122,0.3);
+    color: var(--verde);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--verde);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 8vw, 110px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .verde { color: var(--verde); }
+  .hero h1 .oro { color: var(--oro); }
+
+  .hero-sub {
+    font-size: 20px;
+    color: var(--texto-suave);
+    margin-bottom: 40px;
+    max-width: 520px;
+    line-height: 1.5;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-sub strong { color: var(--blanco); }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--verde);
+    color: var(--negro);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    padding: 16px 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary:hover {
+    background: var(--verde-oscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,232,122,0.35);
+  }
+
+  .btn-secondary {
+    color: var(--texto-suave);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--blanco); }
+
+  .hero-social-proof {
+    display: flex;
+    gap: 40px;
+    margin-top: 60px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .proof-item strong {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--verde);
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  .proof-item span {
+    font-size: 13px;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-visual {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52%;
+    z-index: 1;
+    animation: fadeLeft 0.8s 0.3s ease both;
+  }
+
+  .mockup-card {
+    background: var(--gris-medio);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    padding: 24px;
+    width: 380px;
+    margin-left: auto;
+    margin-right: 60px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,232,122,0.05);
+    position: relative;
+  }
+
+  .mockup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .mockup-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  .live-badge {
+    background: rgba(255,60,60,0.15);
+    border: 1px solid rgba(255,60,60,0.4);
+    color: #FF4444;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background: #FF4444;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+  }
+
+  .player-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gris-borde);
+    gap: 12px;
+  }
+
+  .player-row:last-child { border-bottom: none; }
+
+  .player-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--texto-suave);
+    width: 24px;
+    text-align: center;
+  }
+
+  .player-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .player-info { flex: 1; }
+
+  .player-name {
+    font-weight: 700;
+    font-size: 14px;
+    display: block;
+  }
+
+  .player-pos {
+    font-size: 11px;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .player-pts {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--verde);
+    letter-spacing: 1px;
+  }
+
+  .player-pts.updating {
+    animation: countUp 0.3s ease;
+  }
+
+  @keyframes countUp {
+    0% { transform: scale(1.3); color: var(--oro); }
+    100% { transform: scale(1); color: var(--verde); }
+  }
+
+  .mockup-total {
+    margin-top: 16px;
+    background: rgba(0,232,122,0.08);
+    border: 1px solid rgba(0,232,122,0.2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mockup-total span {
+    font-size: 13px;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mockup-total strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--verde);
+    letter-spacing: 2px;
+  }
+
+  .rank-badge {
+    position: absolute;
+    top: -14px;
+    right: 20px;
+    background: var(--oro);
+    color: var(--negro);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    padding: 4px 14px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(40px) translateY(-50%); }
+    to { opacity: 1; transform: translateX(0) translateY(-50%); }
+  }
+
+  /* ─── SECTIONS BASE ─── */
+  section { padding: 100px 48px; }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 18px;
+    color: var(--texto-suave);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* ─── DIFERENCIALES ─── */
+  .dif {
+    background: var(--gris-oscuro);
+    border-top: 1px solid var(--gris-borde);
+    border-bottom: 1px solid var(--gris-borde);
+  }
+
+  .dif-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .dif-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .dif-header .section-sub { margin: 0 auto; }
+
+  .dif-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--gris-borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .dif-card {
+    background: var(--gris-oscuro);
+    padding: 40px 32px;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .dif-card:hover { background: var(--gris-medio); }
+
+  .dif-icon {
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .dif-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--blanco);
+  }
+
+  .dif-card p {
+    font-size: 15px;
+    color: var(--texto-suave);
+    line-height: 1.5;
+  }
+
+  .dif-card .chip {
+    display: inline-block;
+    background: rgba(0,232,122,0.1);
+    border: 1px solid rgba(0,232,122,0.25);
+    color: var(--verde);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ─── CÓMO FUNCIONA ─── */
+  .como {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .como-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gris-borde);
+    position: relative;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--gris-borde);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 56px;
+    transition: color 0.3s;
+  }
+
+  .step:hover .step-num { color: var(--verde); }
+
+  .step-content h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .step-content p {
+    font-size: 15px;
+    color: var(--texto-suave);
+    line-height: 1.5;
+  }
+
+  .como-visual {
+    background: var(--gris-oscuro);
+    border: 1px solid var(--gris-borde);
+    border-radius: 20px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .como-visual::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--verde), var(--oro));
+  }
+
+  .budget-bar {
+    margin-bottom: 28px;
+  }
+
+  .budget-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--texto-suave);
+  }
+
+  .budget-label strong { color: var(--verde); font-size: 15px; }
+
+  .budget-track {
+    height: 8px;
+    background: var(--gris-borde);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .budget-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--verde), var(--oro));
+    border-radius: 100px;
+    width: 35%;
+    transition: width 0.6s ease;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .field-player {
+    background: var(--gris-medio);
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .field-player:hover {
+    border-color: var(--verde);
+    transform: translateY(-2px);
+  }
+
+  .field-player.selected {
+    border-color: var(--verde);
+    background: rgba(0,232,122,0.05);
+  }
+
+  .fp-avatar { font-size: 24px; margin-bottom: 6px; }
+
+  .fp-name {
+    font-size: 12px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .fp-price {
+    font-size: 11px;
+    color: var(--verde);
+    font-weight: 600;
+  }
+
+  .fp-add {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 18px;
+    height: 18px;
+    background: var(--verde);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--negro);
+    font-weight: 900;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .field-player:hover .fp-add { opacity: 1; }
+
+  /* ─── NÚMEROS ─── */
+  .numeros {
+    background: linear-gradient(135deg, rgba(0,232,122,0.05) 0%, rgba(255,208,0,0.03) 100%);
+    border-top: 1px solid var(--gris-borde);
+    border-bottom: 1px solid var(--gris-borde);
+  }
+
+  .numeros-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .numeros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+    background: var(--gris-borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .numero-item {
+    background: var(--gris-oscuro);
+    padding: 48px 32px;
+  }
+
+  .numero-item .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 2px;
+    display: block;
+  }
+
+  .numero-item .num.verde { color: var(--verde); }
+  .numero-item .num.oro { color: var(--oro); }
+  .numero-item .num.blanco { color: var(--blanco); }
+
+  .numero-item p {
+    font-size: 15px;
+    color: var(--texto-suave);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .numero-item p strong { color: var(--blanco); }
+
+  /* ─── PREMIOS ─── */
+  .premios-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .premio-card {
+    background: var(--gris-oscuro);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .premio-header {
+    background: linear-gradient(135deg, rgba(255,208,0,0.12), rgba(255,208,0,0.04));
+    border-bottom: 1px solid rgba(255,208,0,0.2);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .premio-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+
+  .premio-monto {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--oro);
+    letter-spacing: 2px;
+  }
+
+  .premio-body { padding: 28px; }
+
+  .rank-list { list-style: none; }
+
+  .rank-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gris-borde);
+  }
+
+  .rank-list li:last-child { border-bottom: none; }
+
+  .rank-pos {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    width: 32px;
+    text-align: center;
+    color: var(--texto-suave);
+  }
+
+  .rank-list li:nth-child(1) .rank-pos { color: var(--oro); }
+  .rank-list li:nth-child(2) .rank-pos { color: #C0C0C0; }
+  .rank-list li:nth-child(3) .rank-pos { color: #CD7F32; }
+
+  .rank-name { flex: 1; font-weight: 600; }
+
+  .rank-pts {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--verde);
+  }
+
+  .countdown-box {
+    background: rgba(255,208,0,0.07);
+    border: 1px solid rgba(255,208,0,0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .countdown-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--oro);
+    margin-bottom: 12px;
+  }
+
+  .countdown-digits {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .cd-block {
+    text-align: center;
+  }
+
+  .cd-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--blanco);
+    line-height: 1;
+    background: var(--gris-medio);
+    border: 1px solid var(--gris-borde);
+    border-radius: 8px;
+    padding: 8px 16px;
+    min-width: 64px;
+    display: block;
+  }
+
+  .cd-label {
+    font-size: 10px;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .cd-sep {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--texto-suave);
+    line-height: 1.4;
+    align-self: flex-start;
+    padding-top: 8px;
+  }
+
+  /* ─── LIGAS PRIVADAS ─── */
+  .ligas {
+    background: var(--gris-oscuro);
+    border-top: 1px solid var(--gris-borde);
+  }
+
+  .ligas-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .liga-card {
+    background: var(--negro);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .liga-card-header {
+    background: var(--gris-medio);
+    border-bottom: 1px solid var(--gris-borde);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .liga-icon { font-size: 24px; }
+
+  .liga-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .liga-code {
+    margin-left: auto;
+    background: rgba(0,232,122,0.1);
+    border: 1px dashed rgba(0,232,122,0.4);
+    color: var(--verde);
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+  }
+
+  .liga-members {
+    padding: 16px 24px;
+  }
+
+  .member-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gris-borde);
+  }
+
+  .member-row:last-child { border-bottom: none; }
+
+  .member-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--negro);
+    flex-shrink: 0;
+  }
+
+  .member-name { flex: 1; font-size: 14px; font-weight: 600; }
+
+  .member-pts {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--verde);
+  }
+
+  .member-rank {
+    font-size: 12px;
+    color: var(--texto-suave);
+    width: 20px;
+    text-align: right;
+  }
+
+  /* ─── FAQ ─── */
+  .faq-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .faq-list {
+    margin-top: 48px;
+    text-align: left;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--gris-borde);
+    overflow: hidden;
+  }
+
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--blanco);
+    font-family: 'Barlow', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 22px 0;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: color 0.2s;
+  }
+
+  .faq-q:hover { color: var(--verde); }
+
+  .faq-arrow {
+    font-size: 20px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    color: var(--texto-suave);
+  }
+
+  .faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--verde); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    color: var(--texto-suave);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 800px;
+    padding-bottom: 20px;
+  }
+
+  /* ─── CTA FINAL ─── */
+  .cta-final {
+    text-align: center;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,232,122,0.08) 0%, transparent 70%);
+    border-top: 1px solid var(--gris-borde);
+  }
+
+  .cta-final h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 90px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+
+  .cta-final p {
+    font-size: 19px;
+    color: var(--texto-suave);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.5;
+  }
+
+  .cta-final .garantia {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--texto-suave);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--gris-oscuro);
+    border-top: 1px solid var(--gris-borde);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--verde);
+    letter-spacing: 2px;
+  }
+
+  .footer-logo span { color: var(--blanco); }
+
+  footer p {
+    font-size: 13px;
+    color: var(--texto-suave);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--texto-suave);
+    text-decoration: none;
+  }
+
+  .footer-links a:hover { color: var(--verde); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">Fantasy<span>Manager</span></a>
+  <ul>
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#premios">Premios</a></li>
+    <li><a href="#ligas">Ligas privadas</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#jugar" class="btn-nav">Jugar gratis</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">⚡ Puntaje en vivo · Arranca ya</div>
+
+    <h1>
+      ARMÁ<br>
+      TU<br>
+      <span class="verde">EQUIPO.</span><br>
+      GANÁ<br>
+      EN <span class="oro">VIVO.</span>
+    </h1>
+
+    <p class="hero-sub">
+      El único fantasy argentino con <strong>puntaje en tiempo real</strong>. Mientras el partido transcurre, tu equipo puntúa. Nada de esperar al otro día.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#jugar" class="btn-primary">Armar mi equipo gratis →</a>
+      <a href="#como" class="btn-secondary">¿Cómo funciona? ↓</a>
+    </div>
+
+    <div class="hero-social-proof">
+      <div class="proof-item">
+        <strong>+25k</strong>
+        <span>Técnicos activos</span>
+      </div>
+      <div class="proof-item">
+        <strong>+500</strong>
+        <span>En la comunidad activa</span>
+      </div>
+      <div class="proof-item">
+        <strong>100%</strong>
+        <span>Gratis para jugar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mockup visual del equipo en vivo -->
+  <div class="hero-visual">
+    <div class="mockup-card">
+      <div class="rank-badge">🏆 Puesto #12</div>
+      <div class="mockup-header">
+        <span class="mockup-title">Mi Equipo</span>
+        <span class="live-badge"><span class="live-dot"></span> EN VIVO</span>
+      </div>
+
+      <div class="player-row">
+        <span class="player-num">1</span>
+        <div class="player-avatar" style="background:rgba(0,232,122,0.12)">🧤</div>
+        <div class="player-info">
+          <span class="player-name">Romero</span>
+          <span class="player-pos">Arquero</span>
+        </div>
+        <span class="player-pts" id="pts1">12</span>
+      </div>
+      <div class="player-row">
+        <span class="player-num">9</span>
+        <div class="player-avatar" style="background:rgba(255,208,0,0.12)">⭐</div>
+        <div class="player-info">
+          <span class="player-name">Lautaro M.</span>
+          <span class="player-pos">Delantero</span>
+        </div>
+        <span class="player-pts" id="pts2">31</span>
+      </div>
+      <div class="player-row">
+        <span class="player-num">10</span>
+        <div class="player-avatar" style="background:rgba(100,140,255,0.12)">🎯</div>
+        <div class="player-info">
+          <span class="player-name">De Paul</span>
+          <span class="player-pos">Mediocampista</span>
+        </div>
+        <span class="player-pts" id="pts3">18</span>
+      </div>
+      <div class="player-row">
+        <span class="player-num">7</span>
+        <div class="player-avatar" style="background:rgba(255,100,100,0.12)">🔥</div>
+        <div class="player-info">
+          <span class="player-name">Mac Allister</span>
+          <span class="player-pos">Mediocampista</span>
+        </div>
+        <span class="player-pts" id="pts4">24</span>
+      </div>
+
+      <div class="mockup-total">
+        <span>Total Jornada</span>
+        <strong id="total">85</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIALES -->
+<section class="dif">
+  <div class="dif-inner">
+    <div class="dif-header reveal">
+      <div class="section-label">Por qué Fantasy Manager</div>
+      <h2 class="section-title">NO ES COMO<br>LO QUE YA CONOCÉS</h2>
+      <p class="section-sub">Acá los puntos no esperan. Tu equipo puntúa mientras el partido transcurre, en tiempo real.</p>
+    </div>
+
+    <div class="dif-grid">
+      <div class="dif-card reveal">
+        <span class="chip">Exclusivo</span>
+        <span class="dif-icon">⚡</span>
+        <h3>Puntaje en vivo</h3>
+        <p>Ves cómo sube tu puntaje mientras el partido transcurre. Sin esperar al otro día.</p>
+      </div>
+      <div class="dif-card reveal reveal-delay-1">
+        <span class="chip">Nuevo</span>
+        <span class="dif-icon">🎯</span>
+        <h3>Puntaje por rendimiento real</h3>
+        <p>Los puntos reflejan lo que tus jugadores hacen en el partido, jugada por jugada.</p>
+      </div>
+      <div class="dif-card reveal reveal-delay-2">
+        <span class="chip">Popular</span>
+        <span class="dif-icon">🏆</span>
+        <h3>Ranking global con premios</h3>
+        <p>Competís contra miles de técnicos. Los mejores se llevan premios reales cada jornada.</p>
+      </div>
+      <div class="dif-card reveal reveal-delay-3">
+        <span class="chip">Social</span>
+        <span class="dif-icon">🔒</span>
+        <h3>Ligas privadas</h3>
+        <p>Invitá a tus amigos, creá tu liga y decidí quién es el mejor técnico del grupo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como">
+  <div class="como">
+    <div class="como-inner">
+      <div>
+        <div class="reveal">
+          <div class="section-label">Cómo funciona</div>
+          <h2 class="section-title">EN 3 PASOS<br>YA ESTÁS<br>JUGANDO</h2>
+          <p class="section-sub">No hace falta saber nada de fantasy. Si sabés de fútbol, sabés jugar.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal reveal-delay-1">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h3>Registrate gratis en 2 minutos</h3>
+              <p>Creá tu cuenta en segundos y empezá a armar tu equipo hoy.</p>
+            </div>
+          </div>
+          <div class="step reveal reveal-delay-2">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h3>Armá tu equipo con tu presupuesto</h3>
+              <p>Elegí jugadores dentro del presupuesto disponible. Estrategia y conocimiento de fútbol, nada más.</p>
+            </div>
+          </div>
+          <div class="step reveal reveal-delay-3">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h3>Seguí el partido en vivo y ganá</h3>
+              <p>Mirá cómo sube tu puntaje con cada jugada. Competí en el ranking global o en tu liga privada.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="como-visual reveal reveal-delay-2">
+        <div class="budget-bar">
+          <div class="budget-label">
+            <span>Presupuesto disponible</span>
+            <strong>$65M restantes</strong>
+          </div>
+          <div class="budget-track">
+            <div class="budget-fill" id="budgetFill"></div>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field-player selected">
+            <div class="fp-avatar">🧤</div>
+            <span class="fp-name">Romero</span>
+            <span class="fp-price">$12M</span>
+            <div class="fp-add">+</div>
+          </div>
+          <div class="field-player selected">
+            <div class="fp-avatar">⭐</div>
+            <span class="fp-name">Lautaro</span>
+            <span class="fp-price">$28M</span>
+            <div class="fp-add">+</div>
+          </div>
+          <div class="field-player selected">
+            <div class="fp-avatar">🎯</div>
+            <span class="fp-name">De Paul</span>
+            <span class="fp-price">$22M</span>
+            <div class="fp-add">+</div>
+          </div>
+          <div class="field-player">
+            <div class="fp-avatar">🔥</div>
+            <span class="fp-name">Mac Allister</span>
+            <span class="fp-price">$20M</span>
+            <div class="fp-add">+</div>
+          </div>
+          <div class="field-player">
+            <div class="fp-avatar">💨</div>
+            <span class="fp-name">Fernández</span>
+            <span class="fp-price">$18M</span>
+            <div class="fp-add">+</div>
+          </div>
+          <div class="field-player">
+            <div class="fp-avatar">🛡️</div>
+            <span class="fp-name">Tagliafico</span>
+            <span class="fp-price">$15M</span>
+            <div class="fp-add">+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NÚMEROS -->
+<section class="numeros">
+  <div class="numeros-inner">
+    <div class="reveal">
+      <div class="section-label">La comunidad</div>
+      <h2 class="section-title">LOS NÚMEROS<br>HABLAN SOLOS</h2>
+      <p class="section-sub" style="margin:0 auto">Sin publicidad. Sin inversión. Puro fútbol y boca en boca.</p>
+    </div>
+
+    <div class="numeros-grid">
+      <div class="numero-item reveal">
+        <span class="num verde">+25.000</span>
+        <p>Técnicos registrados en menos de <strong>3 meses</strong></p>
+      </div>
+      <div class="numero-item reveal reveal-delay-1">
+        <span class="num oro">+500</span>
+        <p>Miembros en el grupo de <strong>WhatsApp oficial</strong></p>
+      </div>
+      <div class="numero-item reveal reveal-delay-2">
+        <span class="num blanco">100%</span>
+        <p>Gratis para empezar a jugar. Siempre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREMIOS -->
+<section id="premios">
+  <div class="premios-inner">
+    <div class="reveal">
+      <div class="section-label">Ranking y premios</div>
+      <h2 class="section-title">¿QUÉ<br>GANÁS?</h2>
+      <p class="section-sub">Cada jornada tiene un ranking global. Los mejores técnicos se llevan premios reales. ¿Sos uno de ellos?</p>
+
+      <div style="margin-top:40px">
+        <a href="#jugar" class="btn-primary">Quiero competir →</a>
+      </div>
+
+      <div class="countdown-box" style="margin-top: 32px;">
+        <div class="countdown-label">⏰ Próxima jornada arranca en</div>
+        <div class="countdown-digits">
+          <div class="cd-block">
+            <span class="cd-num" id="cd-h">02</span>
+            <div class="cd-label">Horas</div>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-m">34</span>
+            <div class="cd-label">Minutos</div>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-s">51</span>
+            <div class="cd-label">Segundos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="premio-card reveal reveal-delay-2">
+      <div class="premio-header">
+        <h3>🏆 Ranking Global</h3>
+        <span class="premio-monto">$$$</span>
+      </div>
+      <div class="premio-body">
+        <ul class="rank-list">
+          <li>
+            <span class="rank-pos">1°</span>
+            <span class="rank-avatar">👑</span>
+            <span class="rank-name">El_Tecnico99</span>
+            <span class="rank-pts">142 pts</span>
+          </li>
+          <li>
+            <span class="rank-pos">2°</span>
+            <span class="rank-avatar">🥈</span>
+            <span class="rank-name">Pibe_Goleador</span>
+            <span class="rank-pts">138 pts</span>
+          </li>
+          <li>
+            <span class="rank-pos">3°</span>
+            <span class="rank-avatar">🥉</span>
+            <span class="rank-name">LaGuerraDeFonts</span>
+            <span class="rank-pts">135 pts</span>
+          </li>
+          <li>
+            <span class="rank-pos">4°</span>
+            <span class="rank-avatar">⚽</span>
+            <span class="rank-name">Crack_10</span>
+            <span class="rank-pts">131 pts</span>
+          </li>
+          <li>
+            <span class="rank-pos">5°</span>
+            <span class="rank-avatar">🔥</span>
+            <span class="rank-name">TuNombre</span>
+            <span class="rank-pts" style="color:var(--oro)">¿Y vos?</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGAS PRIVADAS -->
+<section class="ligas" id="ligas">
+  <div class="ligas-inner">
+    <div class="liga-card reveal">
+      <div class="liga-card-header">
+        <span class="liga-icon">⚽</span>
+        <span class="liga-card-title">La Liga de los Pibes</span>
+        <span class="liga-code">FM-4729</span>
+      </div>
+      <div class="liga-members">
+        <div class="member-row">
+          <div class="member-avatar" style="background:#00E87A">MA</div>
+          <span class="member-name">Matías</span>
+          <span class="member-pts">138 pts</span>
+          <span class="member-rank">1°</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar" style="background:#FFD000">NC</div>
+          <span class="member-name">Nico</span>
+          <span class="member-pts">124 pts</span>
+          <span class="member-rank">2°</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar" style="background:#5B8CFF">GH</div>
+          <span class="member-name">Gonza</span>
+          <span class="member-pts">117 pts</span>
+          <span class="member-rank">3°</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar" style="background:#FF6B6B">LF</div>
+          <span class="member-name">Luciano</span>
+          <span class="member-pts">98 pts</span>
+          <span class="member-rank">4°</span>
+        </div>
+        <div class="member-row" style="opacity:0.4; font-style:italic;">
+          <div class="member-avatar" style="background:var(--gris-borde); color:var(--texto-suave)">?</div>
+          <span class="member-name" style="color:var(--texto-suave)">Invitá a alguien...</span>
+          <span style="font-size:13px; color:var(--verde); font-weight:700;">+ Invitar</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal reveal-delay-2">
+      <div class="section-label">Ligas privadas</div>
+      <h2 class="section-title">JUGÁ<br>CONTRA TUS<br>AMIGOS</h2>
+      <p class="section-sub">Creá tu liga en segundos, invitá a tus amigos y que empiece la discusión. Porque ganarle a un desconocido es lindo, pero ganarle al amigo no tiene precio.</p>
+
+      <div style="margin-top: 40px; display:flex; gap:16px; flex-wrap:wrap;">
+        <a href="#jugar" class="btn-primary">Crear mi liga privada →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="reveal">
+      <div class="section-label">Preguntas frecuentes</div>
+      <h2 class="section-title">¿ALGUNA<br>DUDA?</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Es gratis jugar?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Sí, 100% gratis. Podés registrarte, armar tu equipo y competir sin pagar nada. Existe un Pack Elite para quienes quieran transferencias ilimitadas, pero no es obligatorio para disfrutar el juego.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Cómo se puntúan los jugadores?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a" style="max-height: none !important; padding-bottom: 24px;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:8px;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--verde);">
+                <th style="text-align:left; padding:10px 8px; color:var(--verde); font-weight:800; text-transform:uppercase; letter-spacing:1px; font-size:12px;">Acción</th>
+                <th style="text-align:center; padding:10px 8px; color:var(--verde); font-weight:800; text-transform:uppercase; letter-spacing:1px; font-size:12px;">Puntos</th>
+                <th style="text-align:center; padding:10px 8px; color:var(--verde); font-weight:800; text-transform:uppercase; letter-spacing:1px; font-size:12px;">En vivo</th>
+                <th style="text-align:center; padding:10px 8px; color:var(--verde); font-weight:800; text-transform:uppercase; letter-spacing:1px; font-size:12px;">Post partido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Jugar hasta 59 minutos</td><td style="text-align:center; color:var(--verde); font-weight:700;">1</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Jugar 60 minutos o más</td><td style="text-align:center; color:var(--verde); font-weight:700;">2</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Gol (arquero)</td><td style="text-align:center; color:var(--verde); font-weight:700;">10</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Gol (defensor)</td><td style="text-align:center; color:var(--verde); font-weight:700;">8</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Gol (mediocampista)</td><td style="text-align:center; color:var(--verde); font-weight:700;">6</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Gol (delantero)</td><td style="text-align:center; color:var(--verde); font-weight:700;">5</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Gol definitivo</td><td style="text-align:center; color:var(--verde); font-weight:700;">3</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Gol de penal</td><td style="text-align:center; color:var(--verde); font-weight:700;">3</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Asistencia</td><td style="text-align:center; color:var(--verde); font-weight:700;">3</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Valla invicta (arquero)</td><td style="text-align:center; color:var(--verde); font-weight:700;">4</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Valla invicta (defensor)</td><td style="text-align:center; color:var(--verde); font-weight:700;">3</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Penal atajado (arquero)</td><td style="text-align:center; color:var(--verde); font-weight:700;">5</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Cada 3 atajadas (arquero)</td><td style="text-align:center; color:var(--verde); font-weight:700;">1</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Bonus por Rendimiento (BPR)</td><td style="text-align:center; color:var(--verde); font-weight:700;">1, 2, 3</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(0,232,122,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Victoria del equipo del DT</td><td style="text-align:center; color:var(--verde); font-weight:700;">1</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Gol en contra</td><td style="text-align:center; color:#FF4444; font-weight:700;">-4</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(255,68,68,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Penal fallado</td><td style="text-align:center; color:#FF4444; font-weight:700;">-4</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Tarjeta amarilla</td><td style="text-align:center; color:#FF4444; font-weight:700;">-1</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(255,68,68,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Segunda tarjeta amarilla</td><td style="text-align:center; color:#FF4444; font-weight:700;">-3</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde)"><td style="padding:9px 8px; color:var(--blanco);">Tarjeta roja directa</td><td style="text-align:center; color:#FF4444; font-weight:700;">-4</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr style="border-bottom:1px solid var(--gris-borde); background:rgba(255,68,68,0.03)"><td style="padding:9px 8px; color:var(--blanco);">Gol recibido (arquero)</td><td style="text-align:center; color:#FF4444; font-weight:700;">-1</td><td style="text-align:center; color:var(--verde);">✓</td><td style="text-align:center; color:var(--texto-suave);">—</td></tr>
+              <tr><td style="padding:9px 8px; color:var(--blanco);">Derrota del equipo del DT</td><td style="text-align:center; color:#FF4444; font-weight:700;">-1</td><td style="text-align:center; color:var(--texto-suave);">—</td><td style="text-align:center; color:var(--verde);">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Puedo cambiar mi equipo entre jornadas?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Sí. Cada jornada tenés transferencias disponibles para ajustar tu equipo. Si necesitás más, podés sumar transferencias adicionales o activar el Pack Elite.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-3">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Cuándo se entregan los premios?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Los premios se anuncian al cierre de cada jornada o torneo. El ranking global se actualiza en vivo y podés ver tu posición en cualquier momento. Nos hacemos cargo del envío a cualquier parte del país.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-4">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Tiene aplicación móvil?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Por ahora podés jugar desde cualquier navegador, tanto en celular como en computadora. La experiencia está optimizada para mobile. ¡La app está en camino!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="jugar">
+  <div class="reveal">
+    <div class="section-label">¿Esperando qué?</div>
+    <h2>TU EQUIPO<br>TE ESTÁ<br><span style="color:var(--verde)">ESPERANDO.</span></h2>
+    <p>El próximo partido arranca pronto. ¿Vas a verlo desde afuera o adentro del juego?</p>
+    <a href="#" class="btn-primary" style="font-size:19px; padding:20px 48px;">Armar mi equipo gratis →</a>
+    <div class="garantia">El único Fantasy 100% Argentino</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Fantasy<span>Manager</span></div>
+  <p>© 2025 Fantasy Manager</p>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+    <a href="#">X / Twitter</a>
+    <a href="#">Términos</a>
+  </div>
+</footer>
+
+<script>
+  // ─── SCROLL REVEAL ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ─── FAQ TOGGLE ───
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // ─── PUNTAJE EN VIVO ANIMADO ───
+  const puntajes = [
+    { id: 'pts1', base: 12, max: 20 },
+    { id: 'pts2', base: 31, max: 42 },
+    { id: 'pts3', base: 18, max: 28 },
+    { id: 'pts4', base: 24, max: 35 },
+  ];
+
+  function updateLive() {
+    let total = 0;
+    puntajes.forEach(p => {
+      const el = document.getElementById(p.id);
+      const current = parseInt(el.textContent);
+      if (current < p.max && Math.random() > 0.6) {
+        const nuevo = current + Math.floor(Math.random() * 3) + 1;
+        el.textContent = Math.min(nuevo, p.max);
+        el.classList.remove('updating');
+        void el.offsetWidth;
+        el.classList.add('updating');
+      }
+      total += parseInt(el.textContent);
+    });
+    document.getElementById('total').textContent = total;
+  }
+
+  setInterval(updateLive, 2800);
+
+  // ─── COUNTDOWN ───
+  let segundos = 2 * 3600 + 34 * 60 + 51;
+
+  function updateCountdown() {
+    if (segundos <= 0) return;
+    segundos--;
+    const h = Math.floor(segundos / 3600);
+    const m = Math.floor((segundos % 3600) / 60);
+    const s = segundos % 60;
+    document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+  }
+
+  setInterval(updateCountdown, 1000);
+
+  // ─── BUDGET BAR ANIMADA ───
+  setTimeout(() => {
+    document.getElementById('budgetFill').style.width = '65%';
+  }, 800);
+</script>
+
+</body>
+</html>
